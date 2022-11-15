@@ -4,55 +4,78 @@
 @tailwind utilities;
 
 .disp-xl {
-    font-size: 64px;
-    line-height: 88px;
-    letter-spacing: 1px;
+    @apply text-[64px] leading-[88px] tracking-[1px];
 }
 
 .disp-l {
-    font-size: 56px;
-    line-height: 72px;
-    letter-spacing: 1px;
+    @apply text-[56px] leading-[72px] tracking-[1px];
 }
 
 .disp-m {
-    font-size: 48px;
-    line-height: 56px;
-    letter-spacing: 1px;
+    @apply text-[48px] leading-[56px] tracking-[1px];
 }
 
 .disp-s {
-    font-size: 32px;
-    line-height: 48px;
-    letter-spacing: 1px;
+    @apply text-[32px] leading-[48px] tracking-[1px];
 }
 
 .disp-xs {
-    font-size: 24px;
-    line-height: 32px;
-    letter-spacing: 1px;
+    @apply text-[24px] leading-[32px] tracking-[1px];
 }
 
 .text-xl {
-    font-size: 20px;
-    line-height: 32px;
-    letter-spacing: 0.75px;
+    @apply text-[20px] leading-[32px] tracking-[0.75px];
 }
 
 .text-l {
-    font-size:18px;
-    line-height: 32px;
-    letter-spacing: 0.75px;
+    @apply text-[18px] leading-[32px] tracking-[0.75px];
 }
 
 .text-m {
-    font-size: 15px;
-    line-height: 24px;
-    letter-spacing: 0.75px;
+    @apply text-[15px] leading-[24px] tracking-[0.75px];
 }
 
 .text-s {
-    font-size: 13px;
-    line-height: 22px;
-    letter-spacing: 0.25px;
+    @apply text-[13px] leading-[22px] tracking-[0.25px];
+}
+
+.flex-y {
+    @apply flex flex-col;
+}
+
+.flex-x {
+    @apply flex flex-row;
+}
+
+.center-col-xy {
+    @apply flex-y justify-center items-center;
+}
+
+.center-row-xy {
+    @apply flex-x justify-center items-center;
+}
+
+.center-col-y {
+    @apply flex-y justify-center;
+}
+
+.center-row-y {
+    @apply flex-x justify-center;
+}
+
+.center-col-x {
+    @apply flex-y items-center;
+}
+
+.center-row-x {
+    @apply flex-x items-center;
+}
+
+.quick {
+    transition-duration: 200ms;
+}
+
+.gradient-primary {
+    background: linear-gradient(90deg, rgba(186, 37, 37, 0) 0%, rgba(210, 77, 77, 0.1) 100%);
+    @apply text-primary-400 border-r-4 border-primary-400;
 }
