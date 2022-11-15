@@ -1,5 +1,5 @@
 export interface AvatarProps {
     variant: 'sm' | 'md' | 'lg';
-    src: string;
+    src?: string;
     alt: string;
 }
