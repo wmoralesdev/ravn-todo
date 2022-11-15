@@ -1,3 +1,58 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;700&display=swap');
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.disp-xl {
+    font-size: 64px;
+    line-height: 88px;
+    letter-spacing: 1px;
+}
+
+.disp-l {
+    font-size: 56px;
+    line-height: 72px;
+    letter-spacing: 1px;
+}
+
+.disp-m {
+    font-size: 48px;
+    line-height: 56px;
+    letter-spacing: 1px;
+}
+
+.disp-s {
+    font-size: 32px;
+    line-height: 48px;
+    letter-spacing: 1px;
+}
+
+.disp-xs {
+    font-size: 24px;
+    line-height: 32px;
+    letter-spacing: 1px;
+}
+
+.text-xl {
+    font-size: 20px;
+    line-height: 32px;
+    letter-spacing: 0.75px;
+}
+
+.text-l {
+    font-size:18px;
+    line-height: 32px;
+    letter-spacing: 0.75px;
+}
+
+.text-m {
+    font-size: 15px;
+    line-height: 24px;
+    letter-spacing: 0.75px;
+}
+
+.text-s {
+    font-size: 13px;
+    line-height: 22px;
+    letter-spacing: 0.25px;
+}
