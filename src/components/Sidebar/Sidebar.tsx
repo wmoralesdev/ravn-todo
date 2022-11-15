@@ -7,7 +7,7 @@ type SidebarType = React.FunctionComponent<PropsWithChildren> & { Item: SidebarI
 
 const Sidebar: SidebarType = ({ children }) => (
     <nav className="bg-neutral-400 center-col-x py-4 w-[80vw] h-full gap-4
-    lg:w-[15vw] lg:rounded-xl"
+    lg:w-[15vw] lg:rounded-xl lg:min-w-[15vw]"
     >
         <RavnLogo className="mb-8" />
         <ul className="w-full">
