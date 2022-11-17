@@ -11,10 +11,10 @@ const Avatar: FC<AvatarProps> = ({
         src={src}
         alt={alt}
         className={classNames(
-            'rounded-full transition-all hover:scale-105',
-            variant === 'sm' && 'w-8 h-8',
-            variant === 'md' && 'w-10 h-10',
-            variant === 'lg' && 'w-12 h-12',
+            'rounded-full transition-all aspect-square hover:scale-105',
+            variant === 'sm' && 'min-w-[2rem] w-8 min-h-[2rem] h-8',
+            variant === 'md' && 'min-w-[2.5rem] w-10 min-h-[2.5rem] h-10',
+            variant === 'lg' && 'min-w-[3rem] w-12 min-h-[3rem] h-12',
         )}
     />
 );
