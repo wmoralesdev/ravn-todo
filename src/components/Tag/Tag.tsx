@@ -3,14 +3,13 @@ import React, { FC } from 'react';
 import { TagProps } from './prop';
 
 const Tag: FC<TagProps & { className?: string }> = ({
-    Icon, text, className, variant = 'neutral',
+    Icon, text, className, variant = 'tag-neutral',
 }) => (
     <span
         className={
             classNames(
-                'rounded p-2 center-row-x gap-1 font-bold uppercase bg-opacity-10',
                 className,
-                `tag-${variant}`,
+                variant,
             )
         }
     >
