@@ -1,0 +1,76 @@
+@tailwind base;
+@tailwind components;
+
+@layer components {
+    .scrollbar::-webkit-scrollbar {
+        width: 10px;
+    }
+    
+    .scrollbar::-webkit-scrollbar-track {
+        @apply bg-neutral-200 rounded-full;
+    }
+    
+    .scrollbar::-webkit-scrollbar-thumb {
+        @apply rounded-full bg-primary-400;
+    }
+
+    .tag {
+        @apply bg-opacity-10 rounded p-2 center-row-x gap-1 font-bold uppercase;
+    }
+
+    .tag-neutral {
+        @apply tag bg-[#94979A] text-white bg-opacity-10;
+    }
+    
+    .tag-green {
+        @apply tag bg-secondary-400 text-secondary-400 bg-opacity-10;
+    }
+    
+    .tag-blue {
+        @apply tag bg-[#2F61BF] text-[#2F61BF] bg-opacity-10;
+    }
+    
+    .tag-yellow {
+        @apply tag bg-tertiary-400 text-tertiary-400 bg-opacity-10;
+    }
+    
+    .tag-red {
+        @apply tag bg-primary-400 text-primary-400 bg-opacity-10;
+    }
+
+    .flex-y {
+        @apply flex flex-col;
+    }
+    
+    .flex-x {
+        @apply flex flex-row;
+    }
+    
+    .center-col-xy {
+        @apply flex-y justify-center items-center;
+    }
+    
+    .center-row-xy {
+        @apply flex-x justify-center items-center;
+    }
+    
+    .center-col-y {
+        @apply flex-y justify-center;
+    }
+    
+    .center-row-y {
+        @apply flex-x justify-center;
+    }
+    
+    .center-col-x {
+        @apply flex-y items-center;
+    }
+    
+    .center-row-x {
+        @apply flex-x items-center;
+    }
+    
+    .navbar {
+        @apply bg-neutral-400 py-4 gap-4 lg:rounded-xl;
+    }
+}

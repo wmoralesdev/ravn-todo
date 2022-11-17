@@ -1,0 +1,55 @@
+@tailwind base;
+@tailwind utilities;
+
+@layer utilities {
+    .disp-xl {
+        @apply text-[64px] leading-[88px] tracking-[1px];
+    }
+    
+    .disp-l {
+        @apply text-[56px] leading-[72px] tracking-[1px];
+    }
+    
+    .disp-m {
+        @apply text-[48px] leading-[56px] tracking-[1px];
+    }
+    
+    .disp-s {
+        @apply text-[32px] leading-[48px] tracking-[1px];
+    }
+    
+    .disp-xs {
+        @apply text-[24px] leading-[32px] tracking-[1px];
+    }
+    
+    .text-xl {
+        @apply text-[20px] leading-[32px] tracking-[0.75px];
+    }
+    
+    .text-l {
+        @apply text-[18px] leading-[32px] tracking-[0.75px];
+    }
+    
+    .text-m {
+        @apply text-[15px] leading-[24px] tracking-[0.75px];
+    }
+    
+    .text-s {
+        @apply text-[13px] leading-[22px] tracking-[0.25px];
+    }
+
+    .trans-200 {
+        @apply transition-all duration-200;
+    }
+
+    .trans-300 {
+        @apply transition-all duration-300;
+    }
+
+    .gradient-primary {
+        color: theme('colors.primary.400');
+        border-right-width: 4px;
+        border-color: theme('borderColor.primary.400');
+        background: linear-gradient(90deg, rgba(186, 37, 37, 0) 0%, rgba(210, 77, 77, 0.1) 100%);
+    }
+}
