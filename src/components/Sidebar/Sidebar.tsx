@@ -1,20 +1,32 @@
 import classNames from 'classnames';
-import React, { PropsWithChildren } from 'react';
+import React, { PropsWithChildren, useContext } from 'react';
 import { ReactComponent as RavnLogo } from '@assets/ravn.svg';
+import { LayoutContext } from 'src/ctx/layout';
+import SidebarMobile from './Sidebar.mobile';
+import SidebarDesktop from './Sidebar.desktop';
 
-type SidebarItemType = React.FunctionComponent<PropsWithChildren & { isActive?: boolean }>;
-type SidebarType = React.FunctionComponent<PropsWithChildren> & { Item: SidebarItemType };
+export type SidebarItemType = React.FunctionComponent<PropsWithChildren & { isActive?: boolean }>;
+export type SidebarType = React.FunctionComponent<PropsWithChildren> & { Item: SidebarItemType };
 
-const Sidebar: SidebarType = ({ children }) => (
-    <nav className="bg-neutral-400 center-col-x py-4 w-[80vw] h-full gap-4
-    lg:w-[15vw] lg:rounded-xl lg:min-w-[15vw]"
-    >
-        <RavnLogo className="mb-8" />
-        <ul className="w-full">
-            {children}
-        </ul>
-    </nav>
-);
+const Sidebar: SidebarType = ({ children }) => {
+    const { device } = useContext(LayoutContext)!;
+
+    return device === 'mobile' ? (
+        <SidebarMobile>
+            <RavnLogo className="mb-8" />
+            <ul className="w-full">
+                {children}
+            </ul>
+        </SidebarMobile>
+    ) : (
+        <SidebarDesktop>
+            <RavnLogo className="mb-8" />
+            <ul className="w-full">
+                {children}
+            </ul>
+        </SidebarDesktop>
+    );
+};
 
 const SidebarItem: SidebarItemType = ({ children, isActive }) => (
     <li className="w-full font-bold hover:text-primary-400">
