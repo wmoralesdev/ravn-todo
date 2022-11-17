@@ -38,9 +38,16 @@ module.exports = {
                     '0%, 100%': { transform: 'rotate(-5deg)' },
                     '50%': { transform: 'rotate(5deg)' },
                 },
+                stutteredSpin: {
+                    '0%': { transform: 'rotate(0deg)' },
+                    '50%': { transform: 'rotate(270deg)' },
+                    '55%': { borderRadius: '100%', backgroundColor: '#da584b' },
+                    '100%': { transform: 'rotate(360deg)', borderRadius: '0%' },
+                },
             },
             animation: {
                 wiggle: 'wiggle 1s ease-in-out infinite',
+                'stuttered-spin': 'stutteredSpin 2s ease-in-out infinite',
             },
         },
     },
