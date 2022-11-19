@@ -1,4 +1,3 @@
-import { useQuery } from '@apollo/client';
 import { TaskCard } from '@components/Card';
 import { BaseLayout, Column } from '@components/Common/Layout';
 import { Header } from '@components/Header';

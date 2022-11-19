@@ -15,7 +15,7 @@ const Header: FC = () => {
         },
     });
 
-    const onSubmit = (data) => {};
+    const onSubmit = () => {};
 
     return (
         <>
