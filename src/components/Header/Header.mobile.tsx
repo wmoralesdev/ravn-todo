@@ -2,19 +2,18 @@ import Avatar from '@components/Common/Avatar';
 import classNames from 'classnames';
 import React, { FC, useContext, useState } from 'react';
 import {
-    AiOutlineCloseCircle, AiOutlineBell, AiOutlineMenu, AiOutlinePlus,
+    AiOutlineCloseCircle, AiOutlineBell, AiOutlinePlus,
 } from 'react-icons/ai';
-import { BsGrid } from 'react-icons/bs';
 import { FiSearch } from 'react-icons/fi';
-import { LayoutContext } from 'src/ctx/layout';
+import { AppContenxt } from '@ctx/app.ctx';
 import { HeaderProps } from './props';
 
 const HeaderMobile: FC<HeaderProps<{ search: string }>> = (
     {
-        handleSubmit, register, resetField, onSubmit,
+        handleSubmit, register, resetField, onSubmit, openModal,
     },
 ) => {
-    const { setNavbarStatus } = useContext(LayoutContext)!;
+    const { setNavbarStatus } = useContext(AppContenxt)!;
     const [showInput, setShowInput] = useState(false);
 
     return (
@@ -47,6 +46,13 @@ const HeaderMobile: FC<HeaderProps<{ search: string }>> = (
                 <button type="button" className="py-3 pb-4 border-b-4 border-primary-400 text-primary-400 text-m w-1/2 h-full">Dashboard</button>
                 <button type="button" className="py-3 pb-4 text-m w-1/2 h-full">Task</button>
             </div>
+            <button
+                onClick={openModal}
+                type="button"
+                className="fixed right-4 bottom-4 rounded-full bg-primary-400 text-white p-6 shadow-xl text-2xl"
+            >
+                <AiOutlinePlus />
+            </button>
         </header>
     );
 };

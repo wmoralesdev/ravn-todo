@@ -1,15 +1,27 @@
-import { Status, Tag } from './common.model';
+import { PointEstimate, Status, Tag } from './common.model';
 import { User } from './user.model';
 
 export interface Task {
     assignee: Partial<User>;
-    createdAt: Date;
+    createdAt: string;
     creator: Partial<User>;
-    dueDate: Date;
+    dueDate: string;
     id: string;
     name: string;
-    pointEstimate: string;
+    pointEstimate: PointEstimate;
     position: number;
+    status: Status;
+    tags: Tag[];
+}
+
+export interface CreateTask {
+    assignee: User;
+    dueDate: Date;
+    name: string;
+    pointEstimate: {
+        name: string;
+        value: PointEstimate;
+    }
     status: Status;
     tags: Tag[];
 }

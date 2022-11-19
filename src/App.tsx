@@ -4,13 +4,13 @@ import {
 } from '@apollo/client';
 import Dashboard from '@pages/Dashboard';
 import client from '@gql/client';
-import LayoutContextProvider from './ctx/layout';
+import AppContextProvider from './ctx/app.ctx';
 
 const App: FC = () => (
     <ApolloProvider client={client}>
-        <LayoutContextProvider>
+        <AppContextProvider>
             <Dashboard />
-        </LayoutContextProvider>
+        </AppContextProvider>
     </ApolloProvider>
 );
 export default App;

@@ -13,7 +13,28 @@ export const GET_TASKS = gql`
             position
             assignee {
                 avatar
+                fullName
             }
+        }
+    }
+`;
+
+export const GET_PROFILE = gql`
+    query getProfile {
+        profile {
+            avatar
+            fullName
+            id
+        }
+    }
+`;
+
+export const GET_ASSIGNEES = gql`
+    query getAssignees {
+        users {
+            avatar
+            fullName
+            id
         }
     }
 `;

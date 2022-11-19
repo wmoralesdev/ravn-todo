@@ -3,34 +3,40 @@ import { TaskCard } from '@components/Card';
 import { BaseLayout, Column } from '@components/Common/Layout';
 import { Header } from '@components/Header';
 import { Sidebar } from '@components/Sidebar';
-import React, { FC, useId, useMemo } from 'react';
+import React, {
+    FC, useContext, useEffect, useId, useMemo, useState,
+} from 'react';
 import { BsGrid } from 'react-icons/bs';
-import { GET_TASKS } from '@gql/queries.graph';
-import { statusAsArray } from '@models/common.model';
+import { formatTag as formatSpecialChars } from '@utils/tags';
+import useModal from '@hooks/useModal';
+import { ManageTaskModal } from '@components/Modal';
+import { AppContenxt } from '@ctx/app.ctx';
 import { Task } from '@models/task.model';
 
 const Dashboard: FC = () => {
+    const [update, setUpdate] = useState<Task>();
+    const { tasks: queries } = useContext(AppContenxt)!;
+    const { modalStatus, openModal, closeModal } = useModal();
     const groupId = useId();
-    const queries = statusAsArray.map(
-        (status) => {
-            const { data, loading, error } = useQuery<{ tasks: Task[] }>(GET_TASKS, {
-                variables: {
-                    status,
-                },
-            });
-
-            return {
-                data, loading, error, status,
-            };
-        },
-    );
 
     const isLoading = useMemo(() => queries.some((q) => q.loading === true), [queries]);
 
-    console.log(queries);
+    useEffect(() => {
+        if (update !== undefined) openModal();
+    }, [update]);
 
     return (
         <BaseLayout isLoading={isLoading}>
+            <ManageTaskModal
+                mode="edit"
+                modalStatus={modalStatus}
+                openModal={openModal}
+                closeModal={() => {
+                    closeModal();
+                    setUpdate(undefined);
+                }}
+                task={update}
+            />
             <div className="w-full h-full flex gap-x-8">
                 <Sidebar>
                     <Sidebar.Item isActive>
@@ -47,12 +53,16 @@ const Dashboard: FC = () => {
                                 queries.map(({ data, status }, index) => (
                                     <Column key={`${groupId}-${index}`} className="min-w-[24rem]">
                                         <h1 className="text-m font-bold sticky top-0 bg-neutral-500 w-full pb-4">
-                                            {`${status} ${data?.tasks?.length}`}
+                                            {`${formatSpecialChars(status)} (${data?.tasks?.length})`}
                                         </h1>
                                         <div className="w-full overflow-auto scrollbar space-y-2">
                                             {
                                                 data?.tasks?.map((task) => (
-                                                    <TaskCard key={task.id} task={task} />
+                                                    <TaskCard
+                                                        setEdit={setUpdate}
+                                                        key={task.id}
+                                                        task={task}
+                                                    />
                                                 ))
                                             }
                                         </div>
@@ -61,6 +71,7 @@ const Dashboard: FC = () => {
                             ) : null
                         }
                     </div>
+                    {/* <ManageTaskModal /> */}
                 </div>
             </div>
         </BaseLayout>

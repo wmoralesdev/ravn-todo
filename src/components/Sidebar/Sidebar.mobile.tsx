@@ -1,10 +1,10 @@
 import classNames from 'classnames';
 import React, { FC, PropsWithChildren, useContext } from 'react';
-import { LayoutContext } from 'src/ctx/layout';
+import { AppContenxt } from '@ctx/app.ctx';
 import { IoMdClose } from 'react-icons/io';
 
 const SidebarMobile: FC<PropsWithChildren> = ({ children }) => {
-    const { navbarStatus: isOpen, setNavbarStatus: setIsOpen } = useContext(LayoutContext)!;
+    const { navbarStatus: isOpen, setNavbarStatus: setIsOpen } = useContext(AppContenxt)!;
 
     return (
         <>

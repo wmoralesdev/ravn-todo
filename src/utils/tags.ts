@@ -1,5 +1,5 @@
 /* eslint-disable indent */
-import { Tag } from '@models/common.model';
+import { Status, Tag } from '@models/common.model';
 
 export const getTagColor = (tag: Tag) => {
     switch (tag) {
@@ -12,4 +12,4 @@ export const getTagColor = (tag: Tag) => {
     }
 };
 
-export const formatTag = (tag: Tag) => tag.replace('_', ' ');
+export const formatTag = (tag: Tag | Status) => tag.replace('_', ' ');

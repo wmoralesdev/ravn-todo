@@ -28,8 +28,10 @@
             "@styles/*": ["src/styles/*"],
             "@gql/*": ["src/apollo/*"],
             "@models/*": ["src/models/*"],
+            "@ctx/*": ["src/ctx/*"],
             "@utils/*": ["src/utils/*"]
-        }
+        },
+        "types": ["vite-plugin-svgr/client"]
     },
     "include": [
         "src",

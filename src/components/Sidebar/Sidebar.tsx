@@ -1,7 +1,7 @@
 import classNames from 'classnames';
 import React, { PropsWithChildren, useContext } from 'react';
 import { ReactComponent as RavnLogo } from '@assets/ravn.svg';
-import { LayoutContext } from 'src/ctx/layout';
+import { AppContenxt } from '@ctx/app.ctx';
 import SidebarMobile from './Sidebar.mobile';
 import SidebarDesktop from './Sidebar.desktop';
 
@@ -9,7 +9,7 @@ export type SidebarItemType = React.FunctionComponent<PropsWithChildren & { isAc
 export type SidebarType = React.FunctionComponent<PropsWithChildren> & { Item: SidebarItemType };
 
 const Sidebar: SidebarType = ({ children }) => {
-    const { device } = useContext(LayoutContext)!;
+    const { device } = useContext(AppContenxt)!;
 
     return device === 'mobile' ? (
         <SidebarMobile>
