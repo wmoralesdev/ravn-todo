@@ -2,7 +2,7 @@ import { BaseLayout, TaskColumn } from '@components/Common/Layout';
 import { Header } from '@components/Header';
 import { Sidebar } from '@components/Sidebar';
 import React, {
-    FC, useContext, useEffect, useId, useMemo, useState,
+    FC, useEffect, useId, useState,
 } from 'react';
 import { BsGrid } from 'react-icons/bs';
 import useModal from '@hooks/useModal';
@@ -36,7 +36,7 @@ const Dashboard: FC = () => {
                         <TaskContextProvider>
                             {
                                 taskStatus.map((status, index) => (
-                                    <TaskColumn key={`${groupId}-${index}`} status={status} className="min-w-[24rem]" updateTask={setUpdate} />
+                                    <TaskColumn key={`${groupId}-${index}`} status={status} className="min-w-[24rem]" />
                                 ))
                             }
                             <ManageTaskModal

@@ -4,7 +4,7 @@ import { GET_TASKS } from '@gql/queries.graph';
 import { Task } from '@models/task.model';
 import classNames from 'classnames';
 import React, {
-    Dispatch, FC, PropsWithChildren, SetStateAction, Suspense, useContext,
+    FC, PropsWithChildren, Suspense, useContext,
 } from 'react';
 import { formatTag as formatSpecialChars } from '@utils/tags';
 import { Status, Tag } from '@models/common.model';
@@ -14,10 +14,9 @@ import Loader from '../Loader';
 interface ColumnProps extends PropsWithChildren {
     className: string;
     status: Status;
-    updateTask: Dispatch<SetStateAction<Task | undefined>>;
 }
 
-const TaskColumn: FC<ColumnProps> = ({ status, updateTask }) => {
+const TaskColumn: FC<ColumnProps> = ({ status }) => {
     const { tasks, setTasks } = useContext(TaskContext)!;
 
     // Suspense will not be able to detect data fetching, apollo is in the works
