@@ -3,6 +3,7 @@ import { useForm } from 'react-hook-form';
 import { AppContenxt } from '@ctx/app.ctx';
 import useModal from '@hooks/useModal';
 import { ManageTaskModal } from '@components/Modal';
+import TaskContextProvider from '@ctx/task.ctx';
 import HeaderDesktop from './Hader.desktop';
 import HeaderMobile from './Header.mobile';
 
@@ -17,8 +18,9 @@ const Header: FC = () => {
 
     const onSubmit = () => {};
 
+    // New or edit from the presence of a task(!) (inferred)
     return (
-        <>
+        <TaskContextProvider>
             <ManageTaskModal
                 mode="new"
                 modalStatus={modalStatus}
@@ -44,7 +46,7 @@ const Header: FC = () => {
                     />
                 )
             }
-        </>
+        </TaskContextProvider>
     );
 };
 

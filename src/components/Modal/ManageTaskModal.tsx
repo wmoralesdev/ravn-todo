@@ -1,7 +1,7 @@
 import DatePicker from 'react-datepicker';
 import { Dialog, Listbox } from '@headlessui/react';
 import React, {
-    FC, useContext, useState,
+    FC, useContext, useEffect, useState,
 } from 'react';
 import { FieldErrors, useForm } from 'react-hook-form';
 import { IoMdClose } from 'react-icons/io';
@@ -11,45 +11,106 @@ import { ReactComponent as AssigneeIcon } from '@assets/assignee.svg';
 import { ReactComponent as CalendarIcon } from '@assets/calendar.svg';
 import { CreateTask } from '@models/task.model';
 import { CustomListbox } from '@components/Listbox';
-import { useMutation, useQuery } from '@apollo/client';
+import { gql, useMutation, useQuery } from '@apollo/client';
 import { GET_ASSIGNEES } from '@gql/queries.graph';
 import { Loader } from '@components/Common';
 import { User } from '@models/user.model';
 import Avatar from '@components/Common/Avatar';
 import { toast } from 'react-hot-toast';
 import { CREATE_TASK, UPDATE_TASK } from '@gql/mutations.graph';
-import { AppContenxt } from '@ctx/app.ctx';
 import 'react-datepicker/dist/react-datepicker.css';
 import { toDigit } from '@utils/task';
-import { formatTag } from '@utils/tags';
-import { Tag } from '@models/common.model';
+import { TaskContext } from '@ctx/task.ctx';
+import { Reference } from '@apollo/client/cache';
 import { ManageTaskModalProps } from './props';
 import Modal from './Modal';
 
 const ManageTaskModal: FC<ManageTaskModalProps> = (
     {
-        modalStatus, openModal, closeModal, task, mode,
+        modalStatus, openModal, closeModal,
     },
 ) => {
-    const { tasks } = useContext(AppContenxt)!;
+    const { editableTask: task, setEditableTask } = useContext(TaskContext)!;
     const [dueDate, setDueDate] = useState<Date>();
     const { data, loading } = useQuery(GET_ASSIGNEES);
-    const [mutateFn, { loading: mutateLoading }] = useMutation(CREATE_TASK);
-    const [mutateUpdateFn, { loading: mutateUpdating }] = useMutation(UPDATE_TASK);
+
+    const [createTask, { loading: mutateLoading }] = useMutation(CREATE_TASK, {
+        update(cache, { data: { createTask: createResult } }) {
+            cache.modify({
+                fields: {
+                    tasks(existingTasks, { readField, storeFieldName }) {
+                        if (!storeFieldName.includes('TODO')) return existingTasks;
+
+                        const newTaskRef = cache.writeFragment({
+                            data: createResult,
+                            fragment: gql`
+                                fragment NewTask on Task {
+                                    id
+                                    name
+                                    dueDate
+                                    pointEstimate
+                                    tags
+                                    position
+                                    assignee {
+                                        avatar
+                                        fullName
+                                    }
+                                }
+                            `,
+                        })!;
+
+                        if (existingTasks.some((ref: Reference) => readField('id', ref) === createResult.id)) return existingTasks;
+
+                        return [...existingTasks, newTaskRef];
+                    },
+                },
+            });
+        },
+    });
+
+    const [updateTask, { loading: mutateUpdating }] = useMutation(UPDATE_TASK, {
+        update(cache, { data: { updateTask: updateResult } }) {
+            cache.modify({
+                fields: {
+                    tasks(existingTasks, { readField, storeFieldName }) {
+                        if (!storeFieldName.includes(updateResult.status)) return existingTasks;
+
+                        const newTaskRef = cache.writeFragment({
+                            data: updateResult,
+                            fragment: gql`
+                                fragment NewTask on Task {
+                                    id
+                                    name
+                                    dueDate
+                                    pointEstimate
+                                    tags
+                                    position
+                                    assignee {
+                                        avatar
+                                        fullName
+                                    }
+                                }
+                            `,
+                        })!;
+
+                        if (existingTasks.some((ref: Reference) => readField('id', ref) === updateResult.id)) return existingTasks;
+
+                        return [...existingTasks, newTaskRef];
+                    },
+                },
+            });
+        },
+    });
+
     const {
-        control, handleSubmit, register,
+        control, handleSubmit, register, reset, setValue,
     } = useForm<Partial<CreateTask>>({
         defaultValues: {
-            name: task?.name,
-            pointEstimate: task && task.pointEstimate ? {
-                name: `${toDigit(task.pointEstimate)} Points`,
-                value: task.pointEstimate,
-            } : undefined,
-            status: task?.status,
-            tags: task && task.tags ? (
-                task.tags.map((tag) => (formatTag(tag) as Tag))
-            ) : [],
-            assignee: task ? task.assignee : undefined,
+            name: undefined,
+            pointEstimate: undefined,
+            status: undefined,
+            tags: [],
+            assignee: undefined,
         },
     });
 
@@ -58,6 +119,7 @@ const ManageTaskModal: FC<ManageTaskModalProps> = (
             const body = {
                 variables: {
                     input: {
+                        ...(task ? { id: task.id } : {}),
                         assigneeId: formData?.assignee?.id,
                         dueDate,
                         name: formData.name,
@@ -68,12 +130,12 @@ const ManageTaskModal: FC<ManageTaskModalProps> = (
                 },
             };
 
-            if (mode === 'edit') await mutateUpdateFn(body);
-            else await mutateFn(body);
+            if (task) await updateTask(body);
+            else await createTask(body);
 
+            reset();
             closeModal();
-            toast.success(`Task ${mode === 'edit' ? 'updated' : 'created'}`, { id: mode === 'new' ? 'task-created' : `task-updated-${task?.id}` });
-            tasks?.forEach((current) => current.status === 'TODO' && current.refetch());
+            toast.success(`Task "${formData.name}" ${task ? 'updated' : 'created'}`, { id: !task ? 'task-created' : `task-updated-${task?.id}` });
         } catch (err) {
             toast.error('Something went wrong, please try again', {
                 id: 'failed-create-request',
@@ -86,8 +148,28 @@ const ManageTaskModal: FC<ManageTaskModalProps> = (
         toast.error(error as string, { id: `failed-create-${error}` });
     };
 
+    const closeBehavior = () => {
+        reset();
+        setEditableTask(undefined);
+    };
+
+    useEffect(() => {
+        if (task) {
+            setValue('name', task.name);
+            setValue('pointEstimate', {
+                name: `${toDigit(task.pointEstimate)} Points`,
+                value: task.pointEstimate,
+            });
+            setValue('status', task.status);
+            setValue('tags', task.tags);
+            setValue('assignee', task.assignee as User);
+            setDueDate(new Date(task.dueDate));
+            openModal();
+        }
+    }, [task]);
+
     return (
-        <Modal modalStatus={modalStatus} openModal={openModal} closeModal={closeModal}>
+        <Modal modalStatus={modalStatus} openModal={openModal} closeModal={closeBehavior}>
             { loading || mutateLoading || mutateUpdating ? <Loader /> : null }
             <Dialog.Panel className="mx-auto w-full h-full bg-neutral-500 p-8 lg:p-4 lg:rounded-xl lg:shadow-xl lg:max-w-2xl lg:h-auto">
                 <form onSubmit={handleSubmit(onSubmit, onErrors)}>
@@ -218,7 +300,7 @@ const ManageTaskModal: FC<ManageTaskModalProps> = (
                             Cancel
                         </button>
                         <button className="rounded bg-primary-200 font-medium p-2 px-4" type="submit">
-                            Create
+                            { task ? 'Update' : 'Create' }
                         </button>
                     </div>
                 </form>

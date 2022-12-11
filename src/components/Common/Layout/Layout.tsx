@@ -6,7 +6,7 @@ const Layout: FC<PropsWithChildren & { isLoading: boolean }> = ({ children, isLo
     <main className="min-h-screen h-screen flex-y p-8">
         <Toaster />
         { isLoading ? <Loader /> : null }
-        {children}
+        { children }
     </main>
 );
 

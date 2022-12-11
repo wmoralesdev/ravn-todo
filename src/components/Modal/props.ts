@@ -1,5 +1,3 @@
-import { Task } from '@models/task.model';
-
 export interface ModalProps {
     modalStatus: boolean;
     openModal: () => void;
@@ -8,5 +6,4 @@ export interface ModalProps {
 
 export interface ManageTaskModalProps extends ModalProps {
     mode: 'new' | 'edit';
-    task?: Partial<Task>;
 }
