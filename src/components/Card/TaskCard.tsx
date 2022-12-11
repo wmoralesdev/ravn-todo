@@ -15,32 +15,44 @@ import { Listbox, Transition } from '@headlessui/react';
 import { useMutation } from '@apollo/client';
 import { DELETE_TASK } from '@gql/mutations.graph';
 import { toast } from 'react-hot-toast';
-import { AppContenxt } from '@ctx/app.ctx';
 import { Loader } from '@components/Common';
+import { TaskContext } from '@ctx/task.ctx';
+import { Reference } from '@apollo/client/cache';
 import { TaskCardProps } from './props';
 
 const TaskCard: FC<TaskCardProps> = ({
-    task, setEdit,
+    task,
 }) => {
-    const { tasks } = useContext(AppContenxt)!;
-    const [mutateDeleteFn, { loading: deleteLoading }] = useMutation(DELETE_TASK);
     const id = useId();
+    const { setEditableTask } = useContext(TaskContext)!;
+    const [deleteTask, { loading: deleteLoading }] = useMutation(DELETE_TASK, {
+        update(cache, { data: { deleteTask: deleteResult } }) {
+            cache.modify({
+                fields: {
+                    tasks(existingTasksRef, { readField }) {
+                        return existingTasksRef.filter((taskRef: Reference) => deleteResult.id !== readField('id', taskRef));
+                    },
+                },
+            });
+        },
+    });
 
     const pointAsDigit = toDigit(task.pointEstimate);
 
     const handleOptions = async (value: string) => {
         try {
             if (value === 'delete') {
-                await mutateDeleteFn({
+                await deleteTask({
                     variables: {
-                        id: task.id,
+                        input: {
+                            id: task.id,
+                        },
                     },
                 });
 
-                toast.success('Task deleted', { id: `delete-task-${task.id}` });
-                tasks.forEach((current) => current.status === task.status && current.refetch());
+                toast.success(`${task.name} deleted`, { id: `delete-task-${task.id}` });
             } else {
-                setEdit(task);
+                setEditableTask(task);
             }
         } catch (err) {
             toast.error('Something went wrong, please try again', {

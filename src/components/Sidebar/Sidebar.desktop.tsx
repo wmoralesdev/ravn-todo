@@ -7,3 +7,5 @@ const SidebarDesktop: FC<PropsWithChildren> = ({ children }) => (
 );
 
 export default SidebarDesktop;
+// Prioritize behaviour
+// Colocating things where they're needed

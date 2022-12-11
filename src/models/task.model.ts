@@ -2,7 +2,7 @@ import { PointEstimate, Status, Tag } from './common.model';
 import { User } from './user.model';
 
 export interface Task {
-    assignee: Partial<User>;
+    assignee: Partial<User> | User;
     createdAt: string;
     creator: Partial<User>;
     dueDate: string;
@@ -24,4 +24,9 @@ export interface CreateTask {
     }
     status: Status;
     tags: Tag[];
+}
+
+export interface TaskGroup {
+    status: Status;
+    items: Task[];
 }
